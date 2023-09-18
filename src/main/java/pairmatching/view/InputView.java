@@ -20,7 +20,9 @@ public class InputView {
             "  - 레벨5: \n" +
             "############################################\n" +
             "과정, 레벨, 미션을 선택하세요.\n" +
-            "ex) 백엔드, 레벨1, 자동차경주");
+            "ex) 백엔드, 레벨1, 자동차경주"),
+        REMATCH_CHOICE("매칭 정보가 있습니다. 다시 매칭하시겠습니까?\n" +
+                "네 | 아니오");
 
         private final String message;
 
@@ -37,6 +39,11 @@ public class InputView {
 
     public String readCourseLevelMission() {
         System.out.println(ConsoleMessage.FUNCTION_INFO.message);
+        return Console.readLine();
+    }
+
+    public String readRematchChoice() {
+        System.out.println(ConsoleMessage.REMATCH_CHOICE.message);
         return Console.readLine();
     }
 }

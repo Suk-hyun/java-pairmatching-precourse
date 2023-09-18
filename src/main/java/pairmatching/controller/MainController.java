@@ -1,8 +1,11 @@
 package pairmatching.controller;
 
+import pairmatching.ProgramStatus;
+import pairmatching.domain.CrewNames;
 import pairmatching.domain.FunctionOptions;
 import pairmatching.utils.FileManager;
 import pairmatching.view.InputView;
+import pairmatching.view.OutputView;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,19 +16,37 @@ public class MainController {
 
     public static final String BACKEND_CREW_FILE_PATH = "src/main/resources/backend-crew.md";
     public static final String FRONTEND_CREW_FILE_PATH = "src/main/resources/frontend-crew.md";
+    public static ProgramStatus status;
 
     FileManager fileManager = new FileManager();
     InputView inputView = new InputView();
+    OutputView outputView = new OutputView();
+    CrewNames crewNames;
 
     private final Map<String, Controller> controllerMap = new HashMap<>();
 
     public MainController() {
-        this.controllerMap.put(FunctionOptions.PAIR_MATCHING.value(), new PairMatchingController(inputView));
+        status = ProgramStatus.PROGRAM_START;
+        try {
+            setCrewNames();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.controllerMap.put(FunctionOptions.PAIR_MATCHING.value(), new PairMatchingController(inputView, outputView));
     }
 
     public void run() {
+        while (!status.equals(ProgramStatus.QUIT)) {
+            if (status.equals(ProgramStatus.PROGRAM_START) || status.equals(ProgramStatus.SELECT_FUNCTION)) {
+                selectFunction();
+            }
+        }
+
+    }
+
+    private void selectFunction() {
         try {
-            getCrewNames();
             String functionChoice = inputView.readFunctionChoice();
 
             Controller controller = controllerMap.get(functionChoice);
@@ -37,8 +58,9 @@ public class MainController {
         }
     }
 
-    private void getCrewNames() throws IOException {
+    private void setCrewNames() throws IOException {
         List<String> backend = fileManager.toList(BACKEND_CREW_FILE_PATH);
         List<String> frontend = fileManager.toList(FRONTEND_CREW_FILE_PATH);
+        crewNames = CrewNames.of(backend, frontend);
     }
 }
