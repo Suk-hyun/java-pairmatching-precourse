@@ -36,6 +36,7 @@ public class MainController {
         this.controllerMap.put(FunctionOptions.PAIR_MATCHING.value(), new PairMatchingController(inputView, outputView));
         this.controllerMap.put(FunctionOptions.READ_PAIR.value(), new ReadPairController(inputView, outputView));
         this.controllerMap.put(FunctionOptions.INIT_PAIR.value(), new PairInitializeController(inputView, outputView));
+        this.controllerMap.put(FunctionOptions.QUIT_PROGRAM.value(), new ApplicationExitController());
     }
 
     public void run() {
