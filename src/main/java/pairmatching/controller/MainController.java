@@ -34,6 +34,7 @@ public class MainController {
         }
 
         this.controllerMap.put(FunctionOptions.PAIR_MATCHING.value(), new PairMatchingController(inputView, outputView));
+        this.controllerMap.put(FunctionOptions.READ_PAIR.value(), new ReadPairController(inputView, outputView));
     }
 
     public void run() {

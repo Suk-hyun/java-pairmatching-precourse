@@ -22,6 +22,10 @@ public class MatchingResult {
         store.put(pairOption, pairs);
     }
 
+    public Pairs findByPairOption(PairOption pairOption) {
+        return store.get(pairOption);
+    }
+
     public boolean isPairOptionExist(PairOption pairOption) {
         return store.get(pairOption) != null;
     }
