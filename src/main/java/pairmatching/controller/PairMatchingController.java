@@ -22,26 +22,17 @@ public class PairMatchingController implements Controller {
 
     @Override
     public void process() {
-        String input = inputView.readCourseLevelMission();
+        String pairOptionInput = inputView.readPairOption();
 
-        String[] split = input.split(",");
 
-        String courseValue = split[0].trim();
-        String levelValue = split[1].trim();
-        String missionValue = split[2].trim();
-
-        Course course = Course.getValueOf(courseValue);
-        Level level = Level.getValueOf(levelValue);
-        Mission mission = Mission.getValueOf(missionValue);
-
-        PairOption pairOption = new PairOption(course, level, mission);
+        PairOption pairOption = new PairOption(pairOptionInput);
 
         if (matchingResult.isPairOptionExist(pairOption)) {
             String rematchChoice = inputView.readRematchChoice();
 
             if (rematchChoice.equals("네")) {
                 matchingResult.deleteByPariOption(pairOption);
-                newPairMatching(course, pairOption);
+                newPairMatching(pairOption.getCourse(), pairOption);
             }
             if (rematchChoice.equals("아니오")) {
                 MainController.status = ProgramStatus.SELECT_FUNCTION;
@@ -49,7 +40,7 @@ public class PairMatchingController implements Controller {
         }
 
         if (!matchingResult.isPairOptionExist(pairOption)) {
-            newPairMatching(course, pairOption);
+            newPairMatching(pairOption.getCourse(), pairOption);
         }
     }
 

@@ -8,10 +8,20 @@ public class PairOption {
     private final Level level;
     private final Mission mission;
 
-    public PairOption(Course course, Level level, Mission mission) {
-        this.course = course;
-        this.level = level;
-        this.mission = mission;
+    public PairOption(String input) {
+        String[] split = input.split(",");
+
+        String courseValue = split[0].trim();
+        String levelValue = split[1].trim();
+        String missionValue = split[2].trim();
+
+        this.course = Course.getValueOf(courseValue);
+        this.level = Level.getValueOf(levelValue);
+        this.mission = Mission.getValueOf(missionValue);
+    }
+
+    public Course getCourse() {
+        return this.course;
     }
 
     @Override
