@@ -16,6 +16,8 @@ public class MatchingResult {
         return INSTANCE;
     }
 
+    private MatchingResult() {}
+
     public void save(PairOption pairOption, Pairs pairs) {
         store.put(pairOption, pairs);
     }
