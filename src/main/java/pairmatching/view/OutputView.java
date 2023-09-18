@@ -8,7 +8,8 @@ import java.util.List;
 public class OutputView {
 
     enum ConsoleMessage {
-        PAIR_MATCHING_RESULT("페어 매칭 결과입니다.");
+        PAIR_MATCHING_RESULT("페어 매칭 결과입니다."),
+        INIT_PAIR("초기화 되었습니다.");
 
         private final String message;
 
@@ -23,6 +24,12 @@ public class OutputView {
         for (Pair pair : pairsList) {
             System.out.println(pair);
         }
+        System.out.println();
+    }
+
+    public void printPairInit() {
+        System.out.println();
+        System.out.println(ConsoleMessage.INIT_PAIR.message);
         System.out.println();
     }
 }
