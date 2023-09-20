@@ -1,8 +1,6 @@
 package pairmatching.domain;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public enum Level {
     LEVEL1("레벨1"),
@@ -11,16 +9,16 @@ public enum Level {
     LEVEL4("레벨4"),
     LEVEL5("레벨5");
 
-    private final String name;
+    private final String label;
 
     Level(String name) {
-        this.name = name;
+        this.label = name;
     }
 
-    private static final Map<String, Level> LEVEL_MAP = Arrays.stream(values())
-            .collect(Collectors.toMap(level -> level.name, level -> level));
-
-    public static Level getValueOf(String input) {
-        return LEVEL_MAP.get(input);
+    public static Level getValueOfLabel(String label) {
+        return Arrays.stream(values())
+                .filter(level -> level.label.equals(label))
+                .findAny()
+                .orElseThrow(()-> new IllegalArgumentException("[ERROR] 해당 입력값과 일치하는 레벨이 없습니다."));
     }
 }
