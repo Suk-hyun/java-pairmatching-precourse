@@ -1,10 +1,9 @@
 package pairmatching;
 
-import pairmatching.domain.PairOption;
-import pairmatching.domain.Pairs;
+import pairmatching.domain.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MatchingResult {
 
@@ -26,8 +25,8 @@ public class MatchingResult {
         return store.get(pairOption);
     }
 
-    public boolean isPairOptionExist(PairOption pairOption) {
-        return store.get(pairOption) != null;
+    public boolean hasPreviousMatching(PairOption pairOption) {
+        return store.containsKey(pairOption);
     }
 
     public void deleteByPariOption(PairOption pairOption) {
@@ -37,4 +36,30 @@ public class MatchingResult {
         store.clear();
     }
 
+    public boolean hasDuplicatePairsInSameLevel(PairOption pairOption, Pairs pairs) {
+        Set<Pair> pairsToCompare = new HashSet<>(getPairsToCompare(pairOption));
+        HashSet<Pair> pairResult = new HashSet<>(pairs.getPairs());
+
+        pairsToCompare.retainAll(pairResult);
+        return pairsToCompare.size() != 0;
+    }
+
+    private List<Pair> getPairsToCompare(PairOption pairOption) {
+        Level level = pairOption.getLevel();
+        List<PairOption> optionsToCompare = getOptionsFromSameLevel(level);
+        return getPairsInSameLevel(optionsToCompare);
+    }
+
+    private List<Pair> getPairsInSameLevel(List<PairOption> optionsToCompare) {
+        return optionsToCompare.stream()
+                .map(option -> store.get(option).getPairs())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private List<PairOption> getOptionsFromSameLevel(Level level) {
+        return  store.keySet().stream()
+                .filter(pairOption -> pairOption.getLevel() == level)
+                .collect(Collectors.toList());
+    }
 }

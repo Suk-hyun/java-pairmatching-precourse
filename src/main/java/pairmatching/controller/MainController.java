@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class MainController {
 
-    public static final String BACKEND_CREW_FILE_PATH = "src/main/resources/backend-crew.md";
-    public static final String FRONTEND_CREW_FILE_PATH = "src/main/resources/frontend-crew.md";
+    private static final String BACKEND_CREW_FILE_PATH = "src/main/resources/backend-crew.md";
+    private static final String FRONTEND_CREW_FILE_PATH = "src/main/resources/frontend-crew.md";
     public static ProgramStatus status;
 
     FileManager fileManager = new FileManager();
@@ -27,11 +27,7 @@ public class MainController {
 
     public MainController() {
         status = ProgramStatus.PROGRAM_START;
-        try {
-            setCrewNames();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        handleIoException();
 
         this.controllerMap.put(FunctionOptions.PAIR_MATCHING.value(), new PairMatchingController(inputView, outputView));
         this.controllerMap.put(FunctionOptions.READ_PAIR.value(), new ReadPairController(inputView, outputView));
@@ -42,22 +38,29 @@ public class MainController {
     public void run() {
         while (!status.equals(ProgramStatus.QUIT)) {
             if (status.equals(ProgramStatus.PROGRAM_START) || status.equals(ProgramStatus.SELECT_FUNCTION)) {
-                selectFunction();
+
+                try {
+                    selectFunction();
+                } catch (IllegalArgumentException exception) {
+                    System.out.println(exception.getMessage());
+                }
+
             }
         }
-
     }
 
     private void selectFunction() {
+        String functionChoice = inputView.readFunctionChoice();
+
+        Controller controller = controllerMap.get(functionChoice);
+        controller.process();
+    }
+
+    private void handleIoException() {
         try {
-            String functionChoice = inputView.readFunctionChoice();
-
-            Controller controller = controllerMap.get(functionChoice);
-
-            controller.process();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            setCrewNames();
+        } catch (IOException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 

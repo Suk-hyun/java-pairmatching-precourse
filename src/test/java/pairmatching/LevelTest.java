@@ -9,7 +9,6 @@ public class LevelTest {
     @Test
     void levelTest() {
         Level result = Level.getValueOfLabel("레벨1");
-
         Assertions.assertThat(result).isEqualTo(Level.LEVEL1);
     }
 }

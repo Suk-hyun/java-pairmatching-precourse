@@ -24,13 +24,13 @@ public class ReadPairController implements Controller{
         String input = inputView.readPairOption();
         PairOption pairOption = new PairOption(input);
 
-        if (matchingResult.isPairOptionExist(pairOption)) {
+        if (matchingResult.hasPreviousMatching(pairOption)) {
             Pairs pairs = matchingResult.findByPairOption(pairOption);
             outputView.printMatchingResult(pairs);
             MainController.status = ProgramStatus.SELECT_FUNCTION;
         }
 
-        if (!matchingResult.isPairOptionExist(pairOption)) {
+        if (!matchingResult.hasPreviousMatching(pairOption)) {
             System.out.println("[ERROR] 매칭 이력이 없습니다.");
             MainController.status = ProgramStatus.SELECT_FUNCTION;
         }

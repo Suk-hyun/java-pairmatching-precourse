@@ -24,34 +24,42 @@ public class PairMatchingController implements Controller {
     public void process() {
         String pairOptionInput = inputView.readPairOption();
 
-
         PairOption pairOption = new PairOption(pairOptionInput);
 
-        if (matchingResult.isPairOptionExist(pairOption)) {
+        if (matchingResult.hasPreviousMatching(pairOption)) {
             String rematchChoice = inputView.readRematchChoice();
 
             if (rematchChoice.equals("네")) {
-                matchingResult.deleteByPariOption(pairOption);
-                newPairMatching(pairOption.getCourse(), pairOption);
+                rematch(pairOption);
             }
             if (rematchChoice.equals("아니오")) {
                 MainController.status = ProgramStatus.SELECT_FUNCTION;
             }
         }
 
-        if (!matchingResult.isPairOptionExist(pairOption)) {
-            newPairMatching(pairOption.getCourse(), pairOption);
+        if (!matchingResult.hasPreviousMatching(pairOption)) {
+            newPairMatching(pairOption);
         }
     }
 
-    private void newPairMatching(Course course, PairOption pairOption) {
-        Pairs pairs = matchPairs(course);
+    private void rematch(PairOption pairOption) {
+        matchingResult.deleteByPariOption(pairOption);
+        newPairMatching(pairOption);
+    }
 
-        matchingResult.save(pairOption, pairs);
+    private void newPairMatching(PairOption pairOption) {
+        Pairs pairs;
+        do {
+            pairs = matchPairs(pairOption.getCourse());
 
-        outputView.printMatchingResult(pairs);
+            matchingResult.save(pairOption, pairs);
 
-        MainController.status = ProgramStatus.SELECT_FUNCTION;
+            outputView.printMatchingResult(pairs);
+
+            MainController.status = ProgramStatus.SELECT_FUNCTION;
+
+        } while (!matchingResult.hasDuplicatePairsInSameLevel(pairOption, pairs));
+
     }
 
     private Pairs matchPairs(Course course) {

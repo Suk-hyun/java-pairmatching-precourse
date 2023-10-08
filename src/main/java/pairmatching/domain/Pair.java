@@ -22,10 +22,10 @@ public class Pair {
     @Override
     public String toString() {
         if (pair.size() == 2) {
-            return String.format("%s : %s", pair.get(0), pair.get(1));
+            return String.format("%s : %s", pair.get(0).toString(), pair.get(1).toString());
         }
         if (pair.size() == 3) {
-            return String.format("%s : %s : %s", pair.get(0), pair.get(1), pair.get(2));
+            return String.format("%s : %s : %s", pair.get(0).toString(), pair.get(1).toString(), pair.get(2).toString());
         }
         return null;
     }

@@ -26,7 +26,11 @@ public enum Mission {
     private static final Map<String, Mission> MISSION_MAP = Arrays.stream(values())
             .collect(Collectors.toMap(mission -> mission.name, mission -> mission));
 
-    public static Mission getValueOf(String input) {
+    public static Mission getValueByName(String input) {
         return MISSION_MAP.get(input);
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }
